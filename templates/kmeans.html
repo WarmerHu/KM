@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+  	<link href="{% static 'css/kmeans.css' %}" rel="stylesheet" type="text/css"  />
+  	<script src="{% static 'js/d3.v3.min.js' %}"></script>
+    <title>k-means</title>
+	
+    <meta http-equiv="description" content="k-means">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    
+    
+ 
+  </head>
+  
+  <body>
+    <script type="text/javascript">
+    	//svg的宽度和高度
+      	var w = 1200;
+    	var h = 600;
+   		var padding = 30;
+   		//初始化数据点
+   		var c = {{s.c}}
+    	var k = {{s.k}}
+
+   		//创建刻度尺
+   		var xScale = d3.scale.linear()
+         .domain([0, {{idLen}}])
+         .range([padding, w - padding * 2]);
+   		var yScale = d3.scale.linear()
+         .domain([0, {{levelMax}}])
+         .range([h - padding, padding]);
+   		var rScale = d3.scale.linear()
+         .domain([0, {{levelMax}}])
+         .range([1, 2]);
+        var rxScale = d3.scale.linear()
+         .domain([0, {{idLen}}])
+         .range([1, 2]);
+        var ryScale = d3.scale.linear()
+         .domain([0, {{levelMax}}])
+         .range([2, 5]);
+   		//定义x轴
+   		var xAxis = d3.svg.axis()
+         .scale(xScale)
+         .orient("bottom")
+         .ticks(5);
+   		//定义y轴
+   		var yAxis = d3.svg.axis()
+         .scale(yScale)
+         .orient("left")
+         .ticks(5);
+   		//创建svg元素
+   		var svg = d3.select("body")
+      		.append("svg")
+      		.attr("width", w)
+      		.attr("height", h);
+   		//创建圆形
+   		svg.selectAll("circle")  
+      	.data(c)  
+      	.enter()  
+      	.append("circle")  
+      	.attr("cx", function(d) {  
+        	return xScale(d[0]);  
+      	})  
+      	.attr("cy", function(d) {  
+        	return yScale(d[1]);  
+      	})  
+      	.attr("r", function(d) {  
+        	return rScale(d[1]);  
+      	})
+      	.style("fill",function(d){
+      		if(d[2]==1){return "red";}
+      		if(d[2]==2){return "yellow";}
+      		if(d[2]==3){return "blue";}
+      	});
+      	
+      	svg.selectAll("ellipse")  
+      		.data(k)  
+      		.enter()  
+      		.append("ellipse")  
+      		.attr("cx", function(d) {  
+        		return xScale(d[0]);  
+      		})  
+      		.attr("cy", function(d) {  
+        		return yScale(d[1]);  
+      		})
+      		.attr("rx", function(d) {  
+        		return rxScale(d[0]);  
+      		})  
+      		.attr("ry", function(d) {  
+        		return ryScale(d[1]);  
+      		})
+      		.style("fill",function(d){
+      			if(d[2]==1){return "red";}
+      			if(d[2]==2){return "yellow";}
+      			if(d[2]==3){return "blue";}
+      		});  
+      	
+     
+   
+   //将x轴追加到g元素中
+   svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(0," + (h - padding) + ")")
+    .call(xAxis);
+   
+   //将y轴追加到g元素中
+   svg.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate(" + padding + ",0)")
+    .call(yAxis);
+    </script>
+  </body>
+  {{s.c}}
+  hellp
+  {{s.k}}
+  {{idLen}}
+</html>
+ 
