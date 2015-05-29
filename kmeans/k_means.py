@@ -6,18 +6,19 @@ description:k-means
 '''
 from django.db.models.aggregates import Max
 from kmeans.models import Movie2
+import random
 def readModel():
 #    sql1 = 'SELECT _id, _comment_level FROM movie'
-#    sql2 = 'SELECT COUNT() FROM Movie'
-#    sql3 = 'SELECT MAX(_comment_level) FROM Movie'
+#    sql2 = 'SELECT COUNT() FROM Movie2'
+#    sql3 = 'SELECT MAX(_comment_level) FROM Movie2'
 #    sql1 = movie.objects.raw(sql1)
     sql1 = list(Movie2.objects.all().values('field_id','field_comment_level'))
     sql2 = Movie2.objects.aggregate(Max('field_id'))
     sql3 = Movie2.objects.aggregate(Max('field_comment_level'))
+    sql4 = Movie2.objects.count()
     
-    print sql2
         
-    return sql1, sql2['field_id__max'], sql3['field_comment_level__max']
+    return sql1, sql2['field_id__max'], sql3['field_comment_level__max'], sql4
     
     
 def distance(v,k):
@@ -45,7 +46,7 @@ def avg(v,k):
     return [x/len(v), y/len(v), k[2]]
         
 def kmeans():
-    D,idLen,levelMax = readModel() 
+    D,idLen,levelMax,num = readModel() 
     
     for i,p in enumerate(D):
 #        if type(p)==dict:
@@ -53,17 +54,39 @@ def kmeans():
         D[i]=[D[i]['field_id'],D[i]['field_comment_level'],1]
     
     k1 = [0,0,1]
-    k11 = D[4]
-    C1 = D
+    k11 = D[random.randint(0,num)]
+    C1 = []
     k2 = [0,0]
-    k22 = [D[1][0],D[1][1],2]
+    while(True):
+        i  =  random.randint(0,num)
+        if D[i]!=k11:
+            break
+    k22 = [D[i][0],D[i][1],2]
     C2 = []
     k3 = [0,0]
-    k33 = [D[2][0],D[2][1],3]
+    while(True):
+        i  =  random.randint(0,num)
+        if D[i]!=k11 and D[i]!=k22:
+            break
+    k33 = [D[i][0],D[i][1],3]
     C3 = []
     t = 0
     s = []   
     
+    for p in D:
+        i = min(distance(p,k11),distance(p,k22),distance(p,k33))
+        if i==1:
+            C1.append([p[0],p[1],1])
+        elif i==2:
+            C2.append([p[0],p[1],2])
+        else:
+            C3.append([p[0],p[1],3])
+    k = []
+    k.append(k11)
+    k.append(k22)
+    k.append(k33)
+    c = C1 + C2 + C3
+    s.append({'k':k,'c':c})
     
     while k1!=k11 or k2!=k22 or k3!=k33:
         t += 1
