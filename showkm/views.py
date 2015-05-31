@@ -2,6 +2,10 @@ from django.shortcuts import  render_to_response
 from django.template.context import RequestContext
 #from showkm.k_means import kmeans
 from kmeans import k_means
+from django.views.decorators.csrf import csrf_exempt
+from django.http.response import HttpResponse
+import json
+from django.utils import simplejson
 
 # Create your views here.
 
@@ -12,18 +16,24 @@ class K_C():
         self.k = v['k']
         self.c = v['c']
 
+@csrf_exempt
 def showkm(req):
     
-    idLen, levelMax, s = k_means.kmeans()
-    s = K_C(s[2])
-    
-    if req.POST.has_key('page'):
-        p = req.GET['page']
-        if p==1:
-            s = K_C(s[0])
-        elif p==10:
-            s = K_C(s[1])
+    idMax,idMin, levelMax,levelMin, s = k_means.kmeans()
+    p = 3
+    if req.is_ajax():
+        p = int((req.POST['page']).encode('utf8'))
     
     return render_to_response('kmeans.html',
-                              {'idLen':idLen, 'levelMax':levelMax, 's':s},
+                              {'idLen':idMax,'idMin':idMin, 'levelMax':levelMax,'levelMin':levelMin, 's':K_C(s[p])},
                               context_instance=RequestContext(req))
+
+@csrf_exempt
+def kmAjax(req):
+    if req.is_ajax():
+        p = int((req.POST['page']).encode('utf8'))
+        idMax,idMin, levelMax,levelMin, s = k_means.kmeans()
+        a = simplejson.dumps({
+             'idLen':idMax,'idMin':idMin, 'levelMax':levelMax,'levelMin':levelMin, 's':K_C(s[p])
+             })
+    return HttpResponse() 

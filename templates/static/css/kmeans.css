@@ -10,3 +10,17 @@
     font-family: sans-serif;
     font-size: 11px;
    }
+
+
+#guidance .gd {
+    background-color: white;
+    border: 1px solid;
+    color: black;
+    float: left;
+    font-size: 13px;
+    left: 1em;
+    margin: 0 1px;
+    padding: 1px;
+    position: relative;
+    top: 3em;
+}
