@@ -6,7 +6,9 @@
   	<script src="{% static 'js/jquery.js' %}"></script>
   	<script src="{% static 'js/ajaxPostBase.js' %}"></script>
   	<script src="{% static 'js/d3.v3.min.js' %}"></script>
+  	<!-- 
   	<script src="{% static 'js/km.js' %}"></script>
+  	 -->
   	<script type="text/javascript">
   		var sc = {{s.c}};
   		var sk = {{s.k}};
@@ -26,10 +28,10 @@
   <body>
   <div id="guidance">
 		<ul>
-			<button class="gd" id="0">第1次迭代</button>
-			<button class="gd" id="1">第2次迭代</button>
-			<button class="gd" id="2">第3次迭代</button>
-			<button class="gd" id="3">第n次迭代</button>
+			<INPUT TYPE="submit" value="第1次迭代" onclick="location.href='/k_means/0'" class="gd" id="0">
+			<INPUT TYPE="submit" value="第2次迭代" onclick="location.href='/k_means/1'" class="gd" id="1">
+			<INPUT TYPE="submit" value="第3次迭代" onclick="location.href='/k_means/2'" class="gd" id="2">
+			<INPUT TYPE="submit" value="第n次迭代" onclick="location.href='/k_means/3'" class="gd" id="3">
 		</ul>
 	</div>
     <script type="text/javascript">

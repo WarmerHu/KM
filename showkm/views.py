@@ -3,7 +3,7 @@ from django.template.context import RequestContext
 #from showkm.k_means import kmeans
 from kmeans import k_means
 from django.views.decorators.csrf import csrf_exempt
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
 import json
 from django.utils import simplejson
 
@@ -16,14 +16,18 @@ class K_C():
         self.k = v['k']
         self.c = v['c']
 
+def lastkm(req):
+    return HttpResponseRedirect('/k_means/3')
+
 @csrf_exempt
-def showkm(req):
+def showkm(req,param):
     
     idMax,idMin, levelMax,levelMin, s = k_means.kmeans()
-    p = 3
-    if req.is_ajax():
-        p = int((req.POST['page']).encode('utf8'))
+#    p = 3
+#    if req.is_ajax():
+#        p = int((req.POST['page']).encode('utf8'))
     
+    p = int(param.encode('utf8'))
     return render_to_response('kmeans.html',
                               {'idLen':idMax,'idMin':idMin, 'levelMax':levelMax,'levelMin':levelMin, 's':K_C(s[p])},
                               context_instance=RequestContext(req))
@@ -36,4 +40,4 @@ def kmAjax(req):
         a = simplejson.dumps({
              'idLen':idMax,'idMin':idMin, 'levelMax':levelMax,'levelMin':levelMin, 's':K_C(s[p])
              })
-    return HttpResponse() 
+    return HttpResponse(a) 

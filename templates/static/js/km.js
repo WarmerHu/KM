@@ -2,7 +2,7 @@ $(function() {
 		$(".gd").click(function() {
 			 var id = parseInt($(this).attr("id"));
 			 $.ajax({
-			        type: 'POST',
+			        type: 'GET',
 			        url: '/k_means/page',
 			        data:{
 			        	'page':id,
