@@ -8,10 +8,6 @@ from django.db.models.aggregates import Max, Min
 from kmeans.models import Movie
 import random
 def readModel():
-#    sql1 = 'SELECT _id, _comment_level FROM movie'
-#    sql2 = 'SELECT COUNT() FROM Movie'
-#    sql3 = 'SELECT MAX(_comment_level) FROM Movie'
-#    sql1 = movie.objects.raw(sql1)
     sql1 = list(Movie.objects.all().values('field_id','field_comment_level'))
     sql2 = Movie.objects.aggregate(Max('field_id'))
     sql22 = Movie.objects.aggregate(Min('field_id'))
