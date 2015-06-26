@@ -3,43 +3,51 @@
 <html>
   <head>
   	<link href="{% static 'css/kmeans.css' %}" rel="stylesheet" type="text/css"  />
+  	<script src="{% static 'js/jquery.js' %}"></script>
+  	<script src="{% static 'js/ajaxPostBase.js' %}"></script>
   	<script src="{% static 'js/d3.v3.min.js' %}"></script>
-    <title>k-means</title>
-	
-    <meta http-equiv="description" content="k-means">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    
-    
-    
- 
-  </head>
-  
-  <body>
-    <script type="text/javascript">
+  	<!-- 
+  	<script src="{% static 'js/km.js' %}"></script>
+  	 
+  	 此js是画图的参数-->
+  	<script type="text/javascript">
+  	var idMin = {{idMin}};
+  	var idLen = {{idLen}};
+  	var levelMin = {{levelMin}};
+  	var levelMax = {{levelMax}};
+
+  		window.onload = showkm;
+
+  	
+  		function showkm(){    	
     	//svg的宽度和高度
       	var w = 1200;
     	var h = 600;
    		var padding = 30;
+   		var v1=0;
+   		var v2 =0;
+   		var v3 =0;
    		//初始化数据点
-   		var c = {{s.c}}
-    	var k = {{s.k}}
+   		var c = {{s.c}};
+    	var k = {{s.k}};
+    	console.log(k);
 
    		//创建刻度尺
    		var xScale = d3.scale.linear()
-         .domain([0, {{idLen}}])
+         .domain([idMin, idLen])
          .range([padding, w - padding * 2]);
    		var yScale = d3.scale.linear()
-         .domain([0, {{levelMax}}])
+         .domain([levelMin, levelMax])
          .range([h - padding, padding]);
    		var rScale = d3.scale.linear()
-         .domain([0, {{levelMax}}])
+         .domain([0, levelMax])
          .range([1, 2]);
         var rxScale = d3.scale.linear()
-         .domain([0, {{idLen}}])
-         .range([1, 2]);
+         .domain([0, idLen])
+         .range([5, 10]);
         var ryScale = d3.scale.linear()
-         .domain([0, {{levelMax}}])
-         .range([2, 5]);
+         .domain([0, levelMax])
+         .range([5, 10]);
    		//定义x轴
    		var xAxis = d3.svg.axis()
          .scale(xScale)
@@ -70,11 +78,11 @@
         	return rScale(d[1]);  
       	})
       	.style("fill",function(d){
-      		if(d[2]==1){return "red";}
-      		if(d[2]==2){return "yellow";}
-      		if(d[2]==3){return "blue";}
+      		if(d[2]==1){return "red";v1++;}
+      		if(d[2]==2){return "green";v2++;}
+      		if(d[2]==3){return "blue";v3++;}
       	});
-      	
+     
       	svg.selectAll("ellipse")  
       		.data(k)  
       		.enter()  
@@ -93,9 +101,25 @@
       		})
       		.style("fill",function(d){
       			if(d[2]==1){return "red";}
-      			if(d[2]==2){return "yellow";}
+      			if(d[2]==2){return "green";}
       			if(d[2]==3){return "blue";}
       		});  
+      svg.selectAll("text")
+      .data(k)
+      .enter()
+      .append("text")
+      .text(function(d) {
+        return d[0] + "," + d[1];
+      })
+      .attr("x", function(d) {
+        return xScale(d[0]);
+      })
+      .attr("y", function(d) {
+        return yScale(d[1]);
+      })
+      .attr("font-family", "sans-serif")
+      .attr("font-size", "11px")
+      .attr("fill", "black");
       	
      
    
@@ -110,11 +134,42 @@
     .attr("class", "axis")
     .attr("transform", "translate(" + padding + ",0)")
     .call(yAxis);
-    </script>
+    }
+  	</script>
+
+    <title>k-means</title>
+	
+    <meta http-equiv="description" content="k-means">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+  </head>
+  
+  <body>
+  <div id="guidance">
+		<ul>
+		<!-- 
+		{% if s.has_previous %}
+            <a href="?page={{ s.previous_page_number }}">prev</a>
+        {% endif %}
+        {% if s.has_next %}
+            <a href="?page={{ s.next_page_number }}">next</a>
+        {% endif %}-->
+        
+			<INPUT TYPE="submit" value="第1次迭代" onclick="location.href='/km/0'" class="gd" id="0">
+			<INPUT TYPE="submit" value="第2次迭代" onclick="location.href='/km/1'" class="gd" id="1">
+			<INPUT TYPE="submit" value="第3次迭代" onclick="location.href='/km/2'" class="gd" id="2">
+			<INPUT TYPE="submit" value="第n次迭代" onclick="location.href='/km/3'" class="gd" id="3"> 	
+			<div>
+			<!-- 
+<input type="button" id="firstPage" value="首页"/>
+<input type="button" id="backPage" value="上一页"/>
+<input type="button" id="nextPage" value="下一页"/>
+<input type="button" id="lastPage" value="末页"/>
+<span id="msg"></span>
+</div>-->
+		</ul>
+	</div>
+	
   </body>
-  {{s.c}}
-  hellp
-  {{s.k}}
-  {{idLen}}
 </html>
  
