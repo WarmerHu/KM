@@ -10,50 +10,26 @@
   	<script src="{% static 'js/km.js' %}"></script>
   	 -->
   	<script type="text/javascript">
-  	{% for i in s %}
-		var sc = {{i.c}};
-  		var sk = {{i.k}};
-	{% endfor %}
-  		
-  		var idMin = {{idMin}};
-  		var idLen = {{idLen}};
-  		var levelMin = {{levelMin}};
-  		var levelMax = {{levelMax}};
-  	</script>
+  	var idMin = {{idMin}};
+  	var idLen = {{idLen}};
+  	var levelMin = {{levelMin}};
+  	var levelMax = {{levelMax}};
 
-    <title>k-means</title>
-	
-    <meta http-equiv="description" content="k-means">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  
-  </head>
-  
-  <body>
-  <div id="guidance">
-		<ul>
-		{% if s.has_previous %}
-            <a href="?page={{ s.previous_page_number }}">prev</a>
-        {% endif %}
-        {% if s.has_next %}
-            <a href="?page={{ s.next_page_number }}">next</a>
-        {% endif %}
-        <!-- 
-			<INPUT TYPE="submit" value="第1次迭代" onclick="location.href='/k_means/0'" class="gd" id="0">
-			<INPUT TYPE="submit" value="第2次迭代" onclick="location.href='/k_means/1'" class="gd" id="1">
-			<INPUT TYPE="submit" value="第3次迭代" onclick="location.href='/k_means/2'" class="gd" id="2">
-			<INPUT TYPE="submit" value="第n次迭代" onclick="location.href='/k_means/3'" class="gd" id="3">
-			 -->
-		</ul>
-	</div>
-	
-    <script type="text/javascript">
+  		window.onload = showkm;
+
+  	
+  		function showkm(){    	
     	//svg的宽度和高度
       	var w = 1200;
     	var h = 600;
    		var padding = 30;
+   		var v1=0;
+   		var v2 =0;
+   		var v3 =0;
    		//初始化数据点
-   		var c = sc
-    	var k = sk
+   		var c = {{s.c}};
+    	var k = {{s.k}};
+    	console.log(k);
 
    		//创建刻度尺
    		var xScale = d3.scale.linear()
@@ -101,11 +77,22 @@
         	return rScale(d[1]);  
       	})
       	.style("fill",function(d){
-      		if(d[2]==1){return "red";}
-      		if(d[2]==2){return "green";}
-      		if(d[2]==3){return "blue";}
+      		if(d[2]==1){return "red";v1++;}
+      		if(d[2]==2){return "green";v2++;}
+      		if(d[2]==3){return "blue";v3++;}
       	});
-      	
+      	/*
+      	for(var i=1;i<=k.length;i++){
+      		if(i==1 && v1==0){
+      			k.remove(k[0]);
+      		}
+      		if(i==2 && v2==0){
+      			k.remove(k[1]);
+      		}
+      		if(i==3 && v3==0){
+      			k.remove(k[2]);
+      		}
+      	}*/
       	svg.selectAll("ellipse")  
       		.data(k)  
       		.enter()  
@@ -157,7 +144,43 @@
     .attr("class", "axis")
     .attr("transform", "translate(" + padding + ",0)")
     .call(yAxis);
-    </script>
+    }
+  	</script>
+
+    <title>k-means</title>
+	
+    <meta http-equiv="description" content="k-means">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+  </head>
+  
+  <body>
+  <div id="guidance">
+		<ul>
+		<!-- 
+		{% if s.has_previous %}
+            <a href="?page={{ s.previous_page_number }}">prev</a>
+        {% endif %}
+        {% if s.has_next %}
+            <a href="?page={{ s.next_page_number }}">next</a>
+        {% endif %}
+        
+			<INPUT TYPE="submit" value="第1次迭代" onclick="location.href='/k_means/0'" class="gd" id="0">
+			<INPUT TYPE="submit" value="第2次迭代" onclick="location.href='/k_means/1'" class="gd" id="1">
+			<INPUT TYPE="submit" value="第3次迭代" onclick="location.href='/k_means/2'" class="gd" id="2">
+			<INPUT TYPE="submit" value="第n次迭代" onclick="location.href='/k_means/3'" class="gd" id="3">--> 	
+			<div>
+			<!-- 
+<input type="button" id="firstPage" value="首页"/>
+<input type="button" id="backPage" value="上一页"/>
+<input type="button" id="nextPage" value="下一页"/>
+<input type="button" id="lastPage" value="末页"/>
+<span id="msg"></span>
+</div>-->
+			 
+		</ul>
+	</div>
+	
   </body>
 </html>
  

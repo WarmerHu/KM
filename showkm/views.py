@@ -21,26 +21,28 @@ class K_C():
 def lastkm(req):
     return HttpResponseRedirect('/k_means/3')
 
+
+
 @csrf_exempt
-def showkm(req):
-#    p = int(param.encode('utf8'))
+def showkm(req,param):
+    p = int(param.encode('utf8'))
     idMax,idMin, levelMax,levelMin, s = k_means.kmeans()
-    paginator = Paginator([K_C(s[0]),K_C(s[1]),K_C(s[2]),K_C(s[3])],1)
-    try:
-        page = int(req.GET.get('page',3))
-    except ValueError:
-        page = 3
-     
-    print 'paginator:',paginator
-    try:
-        s = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        s = paginator.page(paginator.num_pages)   
-    
-    print 's:',s.object_list
+#    paginator = Paginator([K_C(s[0]),K_C(s[1]),K_C(s[2]),K_C(s[3])],1)
+#    try:
+#        page = int(req.GET.get('page',4))
+#    except ValueError:
+#        page = 4
+#     
+#    try:
+#        s = paginator.page(page)
+#    except (EmptyPage, InvalidPage):
+#        s = paginator.page(paginator.num_pages)   
+#
+#    for i,p in enumerate(s):    
+#        s[i] = K_C(p)
     
     return render_to_response('kmeans.html',
-                              {'idLen':idMax,'idMin':idMin, 'levelMax':levelMax,'levelMin':levelMin, 's':s},
+                              {'idLen':idMax,'idMin':idMin, 'levelMax':levelMax,'levelMin':levelMin, 's':K_C(s[p])},
                               context_instance=RequestContext(req))
 
 @csrf_exempt
