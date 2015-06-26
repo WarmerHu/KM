@@ -3,14 +3,12 @@ from django.template.context import RequestContext
 #from showkm.k_means import kmeans
 from kmeans import k_means
 from django.views.decorators.csrf import csrf_exempt
-from django.http.response import HttpResponse, HttpResponseRedirect
-from django.utils import simplejson
-from django.core.paginator import Paginator, EmptyPage, InvalidPage
+from django.http.response import  HttpResponseRedirect
 
 # Create your views here.
 
 
-
+#创建用于展现的数据结构
 class K_C():
     k = []
     c = []
@@ -18,14 +16,17 @@ class K_C():
         self.k = v['k']
         self.c = v['c']
 
+#主页重定向
 def lastkm(req):
-    return HttpResponseRedirect('/k_means/3')
+    return HttpResponseRedirect('/km/3')
 
 
 
-@csrf_exempt
-def showkm(req,param):
+
+def kmshow(req,param):
+#    格式化获得的参数
     p = int(param.encode('utf8'))
+#    获取相应数据
     idMax,idMin, levelMax,levelMin, s = k_means.kmeans()
 #    paginator = Paginator([K_C(s[0]),K_C(s[1]),K_C(s[2]),K_C(s[3])],1)
 #    try:
@@ -41,16 +42,9 @@ def showkm(req,param):
 #    for i,p in enumerate(s):    
 #        s[i] = K_C(p)
     
+
     return render_to_response('kmeans.html',
                               {'idLen':idMax,'idMin':idMin, 'levelMax':levelMax,'levelMin':levelMin, 's':K_C(s[p])},
                               context_instance=RequestContext(req))
 
-@csrf_exempt
-def kmAjax(req):
-    if req.is_ajax():
-        p = int((req.POST['page']).encode('utf8'))
-        idMax,idMin, levelMax,levelMin, s = k_means.kmeans()
-        a = simplejson.dumps({
-             'idLen':idMax,'idMin':idMin, 'levelMax':levelMax,'levelMin':levelMin, 's':K_C(s[p])
-             })
-    return HttpResponse(a) 
+

@@ -8,7 +8,8 @@
   	<script src="{% static 'js/d3.v3.min.js' %}"></script>
   	<!-- 
   	<script src="{% static 'js/km.js' %}"></script>
-  	 -->
+  	 
+  	 此js是画图的参数-->
   	<script type="text/javascript">
   	var idMin = {{idMin}};
   	var idLen = {{idLen}};
@@ -81,18 +82,7 @@
       		if(d[2]==2){return "green";v2++;}
       		if(d[2]==3){return "blue";v3++;}
       	});
-      	/*
-      	for(var i=1;i<=k.length;i++){
-      		if(i==1 && v1==0){
-      			k.remove(k[0]);
-      		}
-      		if(i==2 && v2==0){
-      			k.remove(k[1]);
-      		}
-      		if(i==3 && v3==0){
-      			k.remove(k[2]);
-      		}
-      	}*/
+     
       	svg.selectAll("ellipse")  
       		.data(k)  
       		.enter()  
@@ -163,12 +153,12 @@
         {% endif %}
         {% if s.has_next %}
             <a href="?page={{ s.next_page_number }}">next</a>
-        {% endif %}
+        {% endif %}-->
         
-			<INPUT TYPE="submit" value="第1次迭代" onclick="location.href='/k_means/0'" class="gd" id="0">
-			<INPUT TYPE="submit" value="第2次迭代" onclick="location.href='/k_means/1'" class="gd" id="1">
-			<INPUT TYPE="submit" value="第3次迭代" onclick="location.href='/k_means/2'" class="gd" id="2">
-			<INPUT TYPE="submit" value="第n次迭代" onclick="location.href='/k_means/3'" class="gd" id="3">--> 	
+			<INPUT TYPE="submit" value="第1次迭代" onclick="location.href='/km/0'" class="gd" id="0">
+			<INPUT TYPE="submit" value="第2次迭代" onclick="location.href='/km/1'" class="gd" id="1">
+			<INPUT TYPE="submit" value="第3次迭代" onclick="location.href='/km/2'" class="gd" id="2">
+			<INPUT TYPE="submit" value="第n次迭代" onclick="location.href='/km/3'" class="gd" id="3"> 	
 			<div>
 			<!-- 
 <input type="button" id="firstPage" value="首页"/>
@@ -177,7 +167,6 @@
 <input type="button" id="lastPage" value="末页"/>
 <span id="msg"></span>
 </div>-->
-			 
 		</ul>
 	</div>
 	
